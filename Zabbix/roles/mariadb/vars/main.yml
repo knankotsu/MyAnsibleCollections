@@ -1,2 +1,4 @@
 ---
 # vars file for mariadb
+mysql_user: root
+mysql_password: Per+ormance1

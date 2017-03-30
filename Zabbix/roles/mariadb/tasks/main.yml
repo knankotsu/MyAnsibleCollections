@@ -1,2 +1,41 @@
 ---
 # tasks file for mariadb
+- name: Install mariadb
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - mariadb
+    - mariadb-server
+    - mariadb-client
+  notify: Start MariaDB
+
+- name: Set Root Password
+  mysql_user:
+    name: "{{ mysql_user }}"
+    host: "{{ item }}"
+    password: "{{ mysql_password }}"
+    state: present
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+  notify: Reload Privileges
+
+- name: Add my.cnf
+  template:
+    src: my.j2.cnf
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: DELETE And DROP
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - DELETE FROM mysq.user WHERE User=''
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - DROP DATABASE test
+  changed_when: false
+  notify: Reload Privileges
+
+

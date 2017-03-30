@@ -1,2 +1,11 @@
 ---
 # handlers file for mariadb
+- name: Start MariaDB
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Reload Privileges
+  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  changed_when: false
