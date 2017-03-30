@@ -1,0 +1,24 @@
+---
+# tasks file for zabbix
+- name: Install zabbix package
+  yum:
+    name: "{{ item }}"
+    with_items:
+        - "{{ zabbix_repo }}"
+
+- name: Install necessary packages
+  yum:
+    name: "{{ item }}"
+    with_items:
+        - zabbix-server-mysql
+        - zabbix-web-mysql
+        - zabbix-web-japanese
+        - zabbix-agent
+        - zabbix-get
+        - mariadb-server
+    notify: Start MariaDB
+
+- name: Bulk insert to mariadb
+  shell:|
+    zcat /usr/share/doc/zabbix-server-mysql-3.2.1/create.sql.gz | mysql -u zabbix -p"{{ mariadb_pass }}" zabbix
+

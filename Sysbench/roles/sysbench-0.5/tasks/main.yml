@@ -1,0 +1,45 @@
+---
+# tasks file for sysbench-0.5
+- name: Create Install Dir
+  file:
+    path: "{{ install_dir }}"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: 755
+
+- name: Clone Sysbench-0.5
+  git:
+    repo: "{{ sysbench_url }}"
+    dest: "{{ install_dir }}"
+    version: 0.5
+    accept_hostkey: yes
+
+- name: Generate configure
+  command: ./autogen.sh
+  args:
+    chdir: "{{ install_dir }}"
+
+- name: Configure
+  command: ./configure
+  args:
+        chdir: "{{ install_dir }}"
+  ignore_errors: yes
+
+- name: Make
+  make:
+    chdir: "{{ install_dir }}"
+  ignore_errors: yes
+
+- name: Make Install
+  make:
+    chdir: "{{ install_dir }}"
+    target: install
+
+- name: Put bench executable
+  template:
+    src: sysbench.j2.sh
+    dest: /usr/local/bin/sysbench
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: "u=rwx,g=rwx,o=rwx"

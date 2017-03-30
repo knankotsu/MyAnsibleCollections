@@ -1,0 +1,5 @@
+---
+# defaults file for sysbench-0.5
+sysbench_url: https://github.com/akopytov/sysbench
+install_dir: /usr/local/src/sysbench/
+main_user: vagrant

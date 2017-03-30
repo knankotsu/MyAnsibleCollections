@@ -1,0 +1,11 @@
+---
+# handlers file for zabbix
+- name: Configure firewall for Zabbix
+  include: firewall.yml
+
+- name: Start MariaDB
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+

@@ -1,0 +1,14 @@
+---
+- block:
+    - firewalld:
+        port: "{{ item }}"/tcp
+        state: enabled
+        permanent: true
+      with_items:
+        - 10050
+        - 10051
+
+    - firewalld:
+        service: http
+        state: enabled
+        permanent: true

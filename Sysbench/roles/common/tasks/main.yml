@@ -1,0 +1,16 @@
+---
+# tasks file for common
+- name: Install necessary packages
+  yum: name="{{ item }}"
+  with_items:
+    - gcc
+    - gcc-c++
+    - make
+    - autogen
+    - automake
+    - patch
+    - git
+    - libtool
+    - mariadb-devel
+    - vim-common
+
